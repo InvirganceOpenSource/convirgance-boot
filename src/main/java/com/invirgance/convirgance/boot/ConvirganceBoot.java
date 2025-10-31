@@ -142,7 +142,7 @@ public class ConvirganceBoot
                 {
                     file = new File(ROOT + library);
 
-                    if(file == null) throw new IllegalStateException("Unable to load " + library);
+                    if(filein == null) throw new IllegalStateException("Unable to load " + library);
 
                     write(filein, file);
                     out.println(library);
@@ -154,6 +154,25 @@ public class ConvirganceBoot
         in.close();
         
         return new URLClassLoader(urls.toArray(URL[]::new));
+    }
+    
+    private static void extractQuickstart() throws IOException
+    {
+        var root = ConvirganceBoot.class.getClassLoader();
+        File file;
+        
+        try(var filein = root.getResourceAsStream("quickstart-web.xml"))
+        {
+            file = new File(ROOT + "/root/WEB-INF/quickstart-web.xml");
+
+            if(filein == null)
+            {
+                System.out.println("Quickstart not available.");
+                return;
+            }
+
+            write(filein, file);
+        }
     }
     
     
@@ -251,6 +270,7 @@ public class ConvirganceBoot
             }
             
             loader = extractLibraries();
+            extractQuickstart();
         }
         
         if(prepare) 
