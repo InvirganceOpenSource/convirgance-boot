@@ -71,6 +71,7 @@ public class Startup implements Runnable
         
         System.out.println("WAR: " + context.getWar());
         
+        context.setInitParameter("autoPreconfigure", "true"); // Enable quickstart if configured
         server.setHandler(context);
         server.start();
         
